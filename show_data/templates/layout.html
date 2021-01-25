@@ -20,8 +20,8 @@
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="nav navbar-nav navbar-right">
-                <!-セッションに応じてログアウト表示を切り替え->
-                {% if session.logged_in %}
+                <!-ログイン状況に応じてログアウトボタン表示を切り替え->
+                {% if current_user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link" href={{url_for('logout')}}>ログアウト</a>
                 </li>
