@@ -2,6 +2,7 @@ from show_data import app, login_manager, db
 from flask import request, redirect, url_for, render_template, flash, session
 from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin, current_user
 from show_data.models.users import User
+from show_data.models.posts import Post
 
 # ルート画面表示（ログイン画面）
 @app.route('/')
@@ -49,7 +50,8 @@ def logout():
 @app.route('/show')
 @login_required
 def show():
-    return render_template('show.html')
+    posts = Post.query.all()
+    return render_template('show.html', posts=posts)
 
 # 会員登録画面表示
 @app.route('/regist')
@@ -59,15 +61,22 @@ def regist():
 # 会員登録処理
 @app.route('/do_regist', methods=['POST'])
 def do_regist():
-    # リクエストフォームのemailをUserインスタンスにセット
-    user = User(email=request.form['email'])
-    # リクエストフォームのpasswordをハッシュ化してUserインスタンスにセット
-    user.set_password(request.form['password'])
-    # UserテーブルにINSERTする
-    db.session.add(user)
-    db.session.commit()
-    flash('会員登録が完了しました。ログインしてください。')
-    return redirect(url_for('index'))
+    already_user = User.query.filter_by(email=request.form['email']).first()
+    # DBに既に登録されているメールアドレスが入力された場合
+    if already_user is not None:
+        flash('そのメールアドレスは既に使用されています')
+        return redirect(url_for('regist'))
+    # 新規登録できるメールアドレスの場合
+    else:
+        # リクエストフォームのemailをUserインスタンスにセット
+        user = User(email=request.form['email'])
+        # リクエストフォームのpasswordをハッシュ化してUserインスタンスにセット
+        user.set_password(request.form['password'])
+        # UserテーブルにINSERTする
+        db.session.add(user)
+        db.session.commit()
+        flash('会員登録が完了しました。ログインしてください。')
+        return redirect(url_for('index'))
 
 # 存在しないURLへアクセスされた時の処理。ログイン画面にリダイレクト。
 @app.errorhandler(404)
