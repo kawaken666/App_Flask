@@ -10,6 +10,7 @@ flask-script = "*"
 coverage = "*"
 flask-login = "*"
 gunicorn = "*"
+psycopg2 = "*"
 
 [dev-packages]
 
