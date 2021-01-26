@@ -1,10 +1,17 @@
-<link rel=stylesheet href="{{url_for('static',filename='stylesheet.css')}}">
+<link rel="stylesheet" href="{{url_for('static',filename='stylesheet.css')}}">
 
 {% extends "layout.html" %}
 {% block body%}
 <div>
     <p>投稿一覧</p>
 </div>
+
+<!- 日付指定フォーム ->
+<form action="{{url_for('show')}}" method="get">
+    <input type="date" name="startDate" value="{{startDate}}"/>〜<input type="date" name="endDate" value="{{endDate}}"/>
+    <button type="submit" class="btn btn-primary">日付指定</button>
+</form>
+
 <table border="1">
 <tr bgcolor="#f0f8ff" align="center">
     <th>投稿内容</th>
@@ -17,6 +24,8 @@
     <th>保存数</th>
     <th>動画再生</th>
 </tr>
+
+<!- 取得したSQLクエリ分、行作成する ->
 {% for post in posts %}
 <tr align="center">
     <th>{{post.post_text}}</th>
@@ -32,5 +41,4 @@
 </tr>
 {% endfor %}
 </table>
-
 {% endblock %}

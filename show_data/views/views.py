@@ -3,6 +3,8 @@ from flask import request, redirect, url_for, render_template, flash, session
 from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin, current_user
 from show_data.models.users import User
 from show_data.models.posts import Post
+from datetime import datetime
+from sqlalchemy import and_, desc
 
 # ルート画面表示（ログイン画面）
 @app.route('/')
@@ -10,7 +12,7 @@ def index():
     # ログインしている場合は投稿一覧画面にリダイレクトする
     if current_user.is_authenticated:
         return redirect(url_for('show'))
-    # ログインしていない場合はログイン画面をレンダーする
+    # ログインしていない場合はログイン画面をレンダリングする
     return render_template('login.html')
 
 # ログイン処理
@@ -50,8 +52,34 @@ def logout():
 @app.route('/show')
 @login_required
 def show():
-    posts = Post.query.all()
-    return render_template('show.html', posts=posts)
+    # レンダリングで受け取ったURLクエリを再度渡すためにここで定義しておく
+    query_startDate = request.args.get('startDate')
+    query_endDate = request.args.get('endDate')
+
+    # dateTime変換処理のif文内のローカル変数だと、後続のDB接続処理のif文で変数定義できてなくてエラー吐くのでここで定義しておく
+    startDate = None
+    endDate = None
+
+    # URLクエリがNoneでない、かつ、''でない場合にのみdateTimeに変換する。
+    # datetime.strptime()にNoneまたは''を入れると変換できずエラー吐くので分岐している。
+    # 初期遷移時：URLクエリ=None , 日付指定なし日付指定時：URLクエリ=''　となる
+    if query_startDate is not None and query_startDate is not '':
+        startDate = datetime.strptime(query_startDate, '%Y-%m-%d')
+    if query_endDate is not None and query_endDate is not '':
+        endDate = datetime.strptime(query_endDate, '%Y-%m-%d')
+
+    # startDateとendDateの有無に応じて流すSQLを分岐させる
+    if startDate is not None and endDate is not None:
+        posts = Post.query.filter(and_(startDate <= Post.post_date, Post.post_date <= endDate)).order_by(desc(Post.post_date))
+    elif endDate is not None:
+        posts = Post.query.filter(Post.post_date <= endDate).order_by(desc(Post.post_date))
+    elif startDate is not None:
+        posts = Post.query.filter(startDate <= Post.post_date).order_by(desc(Post.post_date))
+    else:
+        posts = Post.query.order_by(desc(Post.post_date)).all()
+
+    # SQLクエリと受け取ったURLクエリを乗せてレンダリングする
+    return render_template('show.html', posts=posts, startDate=query_startDate, endDate=query_endDate)
 
 # 会員登録画面表示
 @app.route('/regist')

@@ -1,4 +1,4 @@
 SQLALCHEMY_DATABASE_URI = 'sqlite:///show_data.db'
 SQLALCHEMY_TRACK_MODIFICATIONS = True
 DEBUG = True
-SECRET_KEY = 'secret key'
+SECRET_KEY = 'secret'
