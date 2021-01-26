@@ -9,6 +9,7 @@ flask-sqlalchemy = "*"
 flask-script = "*"
 coverage = "*"
 flask-login = "*"
+gunicorn = "*"
 
 [dev-packages]
 
