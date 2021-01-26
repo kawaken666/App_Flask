@@ -5,8 +5,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 class User(UserMixin,db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(50), unique=True)
-    password_hash = db.Column(db.String(50))
+    email = db.Column(db.String(128), unique=True)
+    password_hash = db.Column(db.String(512))
 
     # セッションからidを取得してDBからユーザー情報を取得するコールバックデコレータ
     # flask-loginを使う際は必ず必要
