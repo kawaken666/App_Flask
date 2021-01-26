@@ -2,3 +2,12 @@ table{
     width: 100%;
     table-layout: fixed;
 }
+
+h5{
+    border-left: solid 9px #DCDCDC;
+    background-color: snow;
+    font-size:1.1em;
+    text-indent: 0.4em;
+    margin-top:14px;
+    margin-bottom:14px;
+}

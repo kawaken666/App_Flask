@@ -1,24 +1,25 @@
 <!DOCTYPE html>
-<title>Flask Blog</title>
+<title>投稿表示アプリ</title>
 
-<!-スタイル調整用の各種インポート->
+<!- スタイル調整用の各種インポート ->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 <script src="https://code.jquery.com/jquery3.2.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <link href="https://fonts.googleapis.com/earlyaccess/mplus1p.css" rel="stylesheet" type="text/css">
-<link rel=stylesheet href="{{url_for('static',filename='style.css')}}">
+<link rel="stylesheet" href="{{url_for('static',filename='stylesheet.css')}}">
 
 <div class="container">
-    <!-ヘッダーバー->
+    <!- ヘッダーバー ->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="nav navbar-nav navbar-right">
-                <!-ログイン状況に応じてログアウトボタン表示を切り替え->
+                <!- ログインしている場合、ログアウトボタンを表示する ->
                 {% if current_user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link" href={{url_for('logout')}}>ログアウト</a>
                 </li>
+                <!- ログインしていない場合、ログイン/会員登録ボタンを表示する ->
                 {% else %}
                 <li class="nav-item">
                     <a class="nav-link" href={{url_for('index')}}>ログイン</a>
@@ -31,14 +32,14 @@
         </div>
     </nav>
 
-    <!-flashにmessageがある場合、アラートを表示する->
+    <!- flashにmessageがある場合、アラートを表示する ->
     {% for message in get_flashed_messages() %}
     <div class="alert alert-info" role="alert">
         {{message}}
     </div>
     {% endfor%}
 
-    <div class="blog-body">
+    <div class="body">
         {% block body %}{% endblock %}
     </div>
 </div>
