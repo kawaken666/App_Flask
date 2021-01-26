@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block body%}
+<!- ログインフォーム ->
+<h5>任意のメールアドレスとパスワードを入力して会員登録を行ってください</h5>
+<form action="{{url_for('do_regist')}}" method="post">
+    <div class="form-group">
+        <label for="InputTitle">メールアドレス</label>
+        <input type="text" class="form-control" id="InputTitle" name="email">
+    </div>
+    <div class="form-group">
+        <label for="InputPassword">パスワード</label>
+        <input type="password" class="form-control" id="InputPassword" name="password">
+    </div>
+    <button type="submit" class="btn btn-primary">会員登録</button>
+</form>
+{% endblock %}
