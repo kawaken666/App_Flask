@@ -3,7 +3,7 @@ import psycopg2
 
 DATABASE_URL = os.environ['DATABASE_URL']
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-SQLALCHEMY_DATABASE_URI = DATABASE_URL
+SQLALCHEMY_DATABASE_URI = conn
 
 """
 # ローカル用のDB接続URI
