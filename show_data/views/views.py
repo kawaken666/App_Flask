@@ -76,8 +76,8 @@ def show():
         startDate = None
         endDate = None
 
-        # URLクエリがNoneでない、かつ、''でない場合にのみdateTimeに変換する。
-        # datetime.strptime()にNoneまたは''を入れると変換できずエラー吐くので分岐している。
+        # URLクエリがNoneでない、かつ、''でない場合にのみdateTimeに変換する
+        # datetime.strptime()にNoneまたは''を入れると変換できずエラー吐くので分岐している
         # 初期遷移時：URLクエリ=None , 日付指定なし日付指定時：URLクエリ=''　となる
         if query_startDate is not None and query_startDate is not '':
             startDate = datetime.strptime(query_startDate, '%Y-%m-%d')
@@ -110,8 +110,8 @@ def do_regist():
         return render_template('regist.html')
     # POSTの場合
     if request.method == 'POST':
-        # フォーム未入力チェック
-        if (request.form['email'] is None or '') and (request.form['password'] is None or ''):
+        # フォーム未入力チェック(フロントのバリデーションを突破された時用)
+        if (request.form['email'] is '') and (request.form['password'] is ''):
             flash('メールアドレスとパスワードは必須項目です。')
             return render_template('login.html')
 
@@ -132,7 +132,8 @@ def do_regist():
             flash('会員登録が完了しました。ログインしてください。')
             return render_template('login.html')
 
-# 存在しないURLへアクセスされた時の処理。ルートアクセス処理にリダイレクト。
+# 存在しないURLへアクセスされた時の処理
+# ルートアクセス処理にリダイレクト
 @app.errorhandler(404)
 def non_existant_route(error):
     return redirect(url_for('index'))
