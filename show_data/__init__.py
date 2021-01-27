@@ -9,8 +9,7 @@ app.config.from_object('show_data.config')
 # LoginManagerインスタンスを作成して初期化
 login_manager = LoginManager()
 login_manager.init_app(app)
-secret_key = generate_password_hash('secret key')
-app.config['SECRET_KEY'] = secret_key
+app.config['SECRET_KEY'] = 'secret'
 
 # SQLAlchemyインスタンスを作成して初期化
 db = SQLAlchemy(app)
