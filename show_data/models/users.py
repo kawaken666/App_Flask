@@ -12,7 +12,7 @@ class User(UserMixin,db.Model):
     # flask-loginを使う際は必ず必要
     @login_manager.user_loader
     def load_user(user_id):
-        return User.get(int(user_id))
+        return User.query.get(int(user_id))
 
     # 会員登録用メソッド
     # password_hashカラムにパスワードをハッシュ化した値を格納する
