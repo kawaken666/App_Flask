@@ -30,7 +30,7 @@ def login():
     # POSTの場合
     if request.method == 'POST':
         # フォーム未入力チェック(フロントのバリデーションを突破された時用)
-        if request.form['email'] is '' and request.form['password'] is '':
+        if request.form['email'] is '' or request.form['password'] is '':
             flash('メールアドレスとパスワードは必須項目です。')
             return render_template('login.html')
 
@@ -111,7 +111,7 @@ def do_regist():
     # POSTの場合
     if request.method == 'POST':
         # フォーム未入力チェック(フロントのバリデーションを突破された時用)
-        if (request.form['email'] is '') and (request.form['password'] is ''):
+        if request.form['email'] is '' or request.form['password'] is '':
             flash('メールアドレスとパスワードは必須項目です。')
             return render_template('login.html')
 
