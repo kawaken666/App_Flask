@@ -29,6 +29,11 @@ def login():
 
     # POSTの場合
     if request.method == 'POST':
+        # フォーム未入力チェック(フロントのバリデーションを突破された時用)
+        if request.form['email'] is '' and request.form['password'] is '':
+            flash('メールアドレスとパスワードは必須項目です。')
+            return render_template('login.html')
+
         # リクエストフォームのemailをキーにUserテーブルからSELECTする
         user = User.query.filter_by(email=request.form['email']).first()
         # ユーザーが存在しない、またはパスワードが一致しない場合
@@ -105,6 +110,11 @@ def do_regist():
         return render_template('regist.html')
     # POSTの場合
     if request.method == 'POST':
+        # フォーム未入力チェック
+        if (request.form['email'] is None or '') and (request.form['password'] is None or ''):
+            flash('メールアドレスとパスワードは必須項目です。')
+            return render_template('login.html')
+
         already_user = User.query.filter_by(email=request.form['email']).first()
         # DBに既に登録されているメールアドレスが入力された場合
         if already_user is not None:
