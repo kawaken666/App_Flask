@@ -2,10 +2,7 @@
 
 {% extends "layout.html" %}
 {% block body%}
-<div>
-    <p>投稿一覧</p>
-</div>
-
+<h5>投稿一覧</h5>
 <!- 日付指定フォーム ->
 <form action="{{url_for('show')}}" method="get">
     <input type="date" name="startDate" value="{{startDate}}"/>〜<input type="date" name="endDate" value="{{endDate}}"/>
