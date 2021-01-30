@@ -11,6 +11,7 @@ coverage = "*"
 flask-login = "*"
 gunicorn = "*"
 psycopg2 = "*"
+pytest = "*"
 
 [dev-packages]
 

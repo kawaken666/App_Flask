@@ -30,7 +30,7 @@ def login():
     # POSTの場合
     if request.method == 'POST':
         # フォーム未入力チェック(フロントのバリデーションを突破された時用)
-        if request.form['email'] is '' or request.form['password'] is '':
+        if request.form['email'] == '' or request.form['password'] == '':
             flash('メールアドレスとパスワードは必須項目です。')
             return render_template('login.html')
 
@@ -79,9 +79,9 @@ def show():
         # URLクエリがNoneでない、かつ、''でない場合にのみdateTimeに変換する
         # datetime.strptime()にNoneまたは''を入れると変換できずエラー吐くので分岐している
         # 初期遷移時：URLクエリ=None , 日付指定なし日付指定時：URLクエリ=''　となる
-        if query_startDate is not None and query_startDate is not '':
+        if query_startDate != None and query_startDate != '':
             startDate = datetime.strptime(query_startDate, '%Y-%m-%d')
-        if query_endDate is not None and query_endDate is not '':
+        if query_endDate != None and query_endDate != '':
             endDate = datetime.strptime(query_endDate, '%Y-%m-%d')
 
         # startDateとendDateの有無に応じて流すSQLを分岐させる
@@ -111,7 +111,7 @@ def do_regist():
     # POSTの場合
     if request.method == 'POST':
         # フォーム未入力チェック(フロントのバリデーションを突破された時用)
-        if request.form['email'] is '' or request.form['password'] is '':
+        if request.form['email'] == '' or request.form['password'] == '':
             flash('メールアドレスとパスワードは必須項目です。')
             return render_template('login.html')
 
