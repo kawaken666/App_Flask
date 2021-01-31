@@ -7,7 +7,7 @@ def test_views_do_regist(client):
     res = client.get('/do_regist')
     assert res.status_code == 200, 'HTTPレスポンスのステータスコードが異常です'
     assert '会員登録してください' in res.get_data(as_text=True)
-    ## 登録前POST
+    # 登録前POST
     # email未入力チェック
     res = client.post('/do_regist', data=dict(email='', password='kenta'))
     assert '会員登録してください' in res.get_data(as_text=True)
@@ -19,6 +19,7 @@ def test_views_do_regist(client):
     # 会員登録処理正常
     res = client.post('/do_regist', data=dict(email='kenta', password='kenta'))
     assert '会員登録が完了しました。ログインしてください。' in res.get_data(as_text=True), '会員登録処理が異常です'
+    # 登録後チェック
     # 会員登録email重複チェック
     res = client.post('/do_regist', data=dict(email='kenta', password='kenta'))
     assert '会員登録してください' in res.get_data(as_text=True)
@@ -85,3 +86,60 @@ def test_views_regist(client):
     res = client.get('/regist')
     assert res.status_code == 200, 'HTTPレスポンスのステータスコードが異常です'
     assert '会員登録してください' in res.get_data(as_text=True)
+
+def test_views_show(ins_post_to_posts, client):
+    # ログイン前GET
+    res = client.get('/show')
+    assert res.status_code == 200, 'HTTPレスポンスのステータスコードが異常です'
+    assert 'ログインしてください' in res.get_data(as_text=True)
+
+    # ログイン処理
+    res = client.post('/login', data=dict(email='kenta', password='kenta'))
+
+    # 初期遷移時(startDate=None and endDate=None)
+    check_query_post_should_exist = ['投稿一覧', '最新ゲーム紹介', '最新化粧品紹介', '最新グルメ紹介', '流行コーデ紹介']
+    res = client.get('/show')
+    assert res.status_code == 200, 'HTTPレスポンスのステータスコードが異常です'
+    for post in check_query_post_should_exist:
+        assert post in res.get_data(as_text=True), 'dbから取得したデータが不適切です'
+
+    # 日付指定(startDate!='' and endDate!='')
+    check_query_post_should_exist = ['投稿一覧', '最新グルメ紹介', '流行コーデ紹介']
+    check_query_post_should_not_exist = ['最新ゲーム紹介', '最新化粧品紹介']
+    res = client.get('/show?startDate=2020-8-31&endDate=2020-10-2')
+    assert res.status_code == 200, 'HTTPレスポンスのステータスコードが異常です'
+    for post in check_query_post_should_exist:
+        assert post in res.get_data(as_text=True), '取得すべきデータをdbから取得していません'
+    for post in check_query_post_should_not_exist:
+        assert post not in res.get_data(as_text=True), '取得すべきでないデータをdbから取得しています'
+
+    # 日付指定(startDate!='' and endDate='')
+    # 取得データの期待値を変数に定義している
+    check_query_post_should_exist = ['投稿一覧', '最新ゲーム紹介', '最新化粧品紹介', '最新グルメ紹介']
+    check_query_post_should_not_exist = ['流行コーデ紹介']
+    res = client.get('/show?startDate=2020-9-30&endDate=')
+    assert res.status_code == 200, 'HTTPレスポンスのステータスコードが異常です'
+    for post in check_query_post_should_exist:
+        assert post in res.get_data(as_text=True), '取得すべきデータをdbから取得していません'
+    for post in check_query_post_should_not_exist:
+        assert post not in res.get_data(as_text=True), '取得すべきでないデータをdbから取得しています'
+
+    # 日付指定(startDate='' and endDate!='')
+    # 取得データの期待値を変数に定義している
+    check_query_post_should_exist = ['投稿一覧', '最新化粧品紹介', '最新グルメ紹介', '流行コーデ紹介']
+    check_query_post_should_not_exist = ['最新ゲーム紹介']
+    res = client.get('/show?startDate=&endDate=2020-11-2')
+    assert res.status_code == 200, 'HTTPレスポンスのステータスコードが異常です'
+    for post in check_query_post_should_exist:
+        assert post in res.get_data(as_text=True), '取得すべきデータをdbから取得していません'
+    for post in check_query_post_should_not_exist:
+        assert post not in res.get_data(as_text=True), '取得すべきでないデータをdbから取得しています'
+
+    # 日付指定(startDate='' and endDate!='')
+    # 取得データの期待値を変数に定義している
+    check_query_post_should_exist = ['投稿一覧', '最新ゲーム紹介', '最新化粧品紹介', '最新グルメ紹介', '流行コーデ紹介']
+    res = client.get('/show?startDate=&endDate=')
+    assert res.status_code == 200, 'HTTPレスポンスのステータスコードが異常です'
+    for post in check_query_post_should_exist:
+        assert post in res.get_data(as_text=True), '取得すべきデータをdbから取得していません'
+
