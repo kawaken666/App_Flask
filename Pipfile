@@ -12,6 +12,7 @@ flask-login = "*"
 gunicorn = "*"
 psycopg2 = "*"
 pytest = "*"
+pytest-cov = "*"
 
 [dev-packages]
 
