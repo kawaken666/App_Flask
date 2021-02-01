@@ -15,7 +15,7 @@ def setup_db():
 
 # 投稿ダミーデータをINSERTする
 @pytest.fixture(scope="function")
-def ins_post_to_posts():
+def insert_dummy_data_to_posts():
     posts = [Post(2, '最新ゲーム紹介', datetime(2020, 12, 1, 17, 30, 23, 174812), 23, 7893, 7465, 505, 2, 76, 0),
              Post(3, '最新化粧品紹介', datetime(2020, 11, 1, 16, 30, 23, 174812), 34, 8675, 7444, 789, 4, 200, 0),
              Post(4, '最新グルメ紹介', datetime(2020, 10, 1, 13, 36, 23, 174812), 77, 19384, 13483, 1544, 32, 584, 0),
