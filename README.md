@@ -13,6 +13,20 @@
 - 投稿記事一覧表示
 - 投稿記事一覧の日付での絞り込み表示
 
+#### pipenvを用いた環境構築  
+1. pipenvをインストールしてください　　
+```
+$ pip install pipenv
+```
+2. pipenvを任意のpythonのバージョンを指定して初期化してください  
+```
+$ pipenv --python 3  # python3系を指定する場合
+```
+3. Pipfileから環境を再現してください(パッケージのインストール)  
+```
+$ pipenv install
+```
+
 #### 使い方
 1. 以下herokuのURLにアクセス  
 https://mighty-shore-18727.herokuapp.com/  
