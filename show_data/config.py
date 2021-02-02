@@ -8,7 +8,7 @@ class BaseConfig(object):
 
     # herokuでしかos.environ['DATABASE_URL']は処理できないのでローカルだと以下1行をコメントアウトする必要あり
     DATABASE_URI = os.environ['DATABASE_URL']
-
+    @classmethod
     def con(self):
         return psycopg2.connect(BaseConfig.DATABASE_URI, sslmode='require')
 
