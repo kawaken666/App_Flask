@@ -15,7 +15,7 @@ def assert_render_do_regist(response):
 # login.html
 def assert_render_login(response):
     assert 'ログインしてください' in response.get_data(as_text=True)
-# login.html
+# regist_post.html
 def assert_render_regist_post(response):
     assert '新規投稿' in response.get_data(as_text=True)
 
