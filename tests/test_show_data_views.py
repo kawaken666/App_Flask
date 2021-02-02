@@ -2,7 +2,8 @@ from tests.helpers import (assert_http_200, assert_http_302, assert_render_do_re
                            assert_flash_required_email_and_password, assert_flash_regist_complete,
                            assert_flash_duplicate_email, assert_render_login, assert_redirect_show,
                            assert_redirect_root, assert_flash_failure_login, assert_flash_success_logout,
-                           assert_is_exist_should_select, assert_is_exist_should_not_select)
+                           assert_is_exist_should_select, assert_is_exist_should_not_select,
+                           assert_render_regist_post, )
 
 # 最初のテスト関数の引数にsetup_dbフィクスチャを入れることで、pytest実行時にdbのcreateを行う。pytest実行後にdropする。
 def test_setup_db(setup_db):
@@ -149,3 +150,32 @@ def test_views_show(insert_dummy_data_to_posts, client):
     for post in check_query_post_should_exist:
         assert_is_exist_should_select(post, res)
 
+
+def test_views_regist_post(client):
+    # ログイン前GET
+    res = client.get('/regist_post')
+    assert_http_200(res)
+    assert_render_login(res)
+
+    # ログイン処理
+    res = client.post('/login', data=dict(email='kenta', password='kenta'))
+
+    # 新規投稿画面表示
+    res = client.get('/regist_post')
+    assert_http_200(res)
+    assert_render_regist_post(res)
+
+
+def test_views_do_regist_post(client):
+    # ログイン前GET
+    res = client.get('/do_regist_post')
+    assert_http_200(res)
+    assert_render_login(res)
+
+    # ログイン処理
+    res = client.post('/login', data=dict(email='kenta', password='kenta'))
+
+    # 投稿登録処理正常
+    res = client.post('/do_regist_post', data=dict(post_text='新規投稿テスト'))
+    assert_http_302(res)
+    assert_redirect_show(res)
