@@ -3,6 +3,7 @@ from flask import request, redirect, url_for, render_template, flash, session
 from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin, current_user
 from show_data.models.users import User
 from show_data.models.posts import Post
+from show_data.views.helper_db import insert_into_db
 from datetime import datetime
 from sqlalchemy import and_, desc
 
@@ -14,6 +15,7 @@ def index():
         return redirect(url_for('show'))
     # ログインしていない場合はログイン画面をレンダリングする
     return render_template('login.html')
+
 
 # ログイン処理
 @app.route('/login', methods=['GET', 'POST'])
@@ -47,6 +49,7 @@ def login():
             login_user(user)
             return redirect(url_for('show'))
 
+
 # ログアウト処理
 @app.route('/logout', methods=['GET'])
 def logout():
@@ -59,6 +62,7 @@ def logout():
         logout_user()
         flash('ログアウトしました')
         return render_template('login.html')
+
 
 # 一覧表示画面表示
 @app.route('/show', methods=['GET'])
@@ -97,10 +101,12 @@ def show():
         # SQLクエリと受け取ったURLクエリを乗せてレンダリングする
         return render_template('show.html', posts=posts, startDate=query_startDate, endDate=query_endDate)
 
+
 # 会員登録画面表示
 @app.route('/regist', methods=['GET'])
 def regist():
     return render_template('regist.html')
+
 
 # 会員登録処理
 @app.route('/do_regist', methods=['GET', 'POST'])
@@ -126,11 +132,35 @@ def do_regist():
             user = User(email=request.form['email'])
             # リクエストフォームのpasswordをハッシュ化してUserインスタンスにセット
             user.set_password(request.form['password'])
-            # UserテーブルにINSERTする
-            db.session.add(user)
-            db.session.commit()
+            # usersテーブルにINSERTする
+            insert_into_db(user)
             flash('会員登録が完了しました。ログインしてください。')
             return render_template('login.html')
+
+
+# 新規投稿画面
+@app.route('/regist_post', methods=['GET'])
+def regist_post():
+    # ログインしていない場合、単にログイン画面にレンダリングする
+    if not current_user.is_authenticated:
+        return render_template('login.html')
+
+    return render_template('regist_post.html')
+
+
+# 新規投稿登録処理
+@app.route('/do_regist_post', methods=['GET', 'POST'])
+def do_regist_post():
+    # ログインしていない場合、単にログイン画面にレンダリングする
+    if not current_user.is_authenticated:
+        return render_template('login.html')
+
+    # postインスタンスにフォームの投稿内容を格納して、postsテーブルにINSERTする
+    post = Post(post_text=request.form['post_text'], post_date=datetime.now())
+    insert_into_db(post)
+    flash('投稿が完了しました')
+    return redirect(url_for('show'))
+
 
 # 存在しないURLへアクセスされた時の処理
 # ルートアクセス処理にリダイレクト

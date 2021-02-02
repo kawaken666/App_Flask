@@ -7,6 +7,7 @@ def assert_http_200(response):
 def assert_http_302(response):
     assert response.status_code == 302, 'リダイレクトレスポンスのステータスコードが異常です'
 
+
 # レンダー先テンプレートが合致しているかを確認するassert
 # regist.html
 def assert_render_do_regist(response):
@@ -14,9 +15,12 @@ def assert_render_do_regist(response):
 # login.html
 def assert_render_login(response):
     assert 'ログインしてください' in response.get_data(as_text=True)
+# regist_post.html
+def assert_render_regist_post(response):
+    assert '新規投稿' in response.get_data(as_text=True)
 
 
-# flashの確認assert
+# flashの確認assert このメソッドはレンダリングの時しか使えないので注意（リダイレクトはレスポンスのdataにhtmlテキストは含まれない）
 # フォーム未入力
 def assert_flash_required_email_and_password(response):
     assert 'メールアドレスとパスワードは必須項目です。' in response.get_data(as_text=True), 'アラート(flash)が正常に出せてません'
@@ -31,7 +35,7 @@ def assert_flash_failure_login(response):
     assert 'ユーザー名、または、パスワードが違います' in response.get_data(as_text=True), 'アラート(flash)が正常に出せてません'
 # ログアウト完了時
 def assert_flash_success_logout(response):
-    assert 'ログアウトしました' in response.get_data(as_text=True)
+    assert 'ログアウトしました' in response.get_data(as_text=True), 'ログアウト処理が異常です'
 
 
 # リダイレクト先ロケーションが合致しているを確認するassert
@@ -44,6 +48,7 @@ def assert_redirect_show(response):
 
 
 # htmlに含まれるDBから取得したデータが、適切であるかを確認するassert
+# このメソッドはレンダリングの時しか使えないので注意（リダイレクトはレスポンスのdataにhtmlテキストは含まれない）
 # 取得すべきデータがレスポンスhtmlに存在するか
 def assert_is_exist_should_select(expect, response):
     assert expect in response.get_data(as_text=True), '取得すべきデータをdbから取得していません'

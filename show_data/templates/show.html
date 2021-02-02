@@ -3,6 +3,7 @@
 {% extends "layout.html" %}
 {% block body%}
 <h5>投稿一覧</h5>
+<p><a class="regist_post" href={{url_for('regist_post')}}>新規投稿</a></p>
 <!- 日付指定フォーム ->
 <form action="{{url_for('show')}}" method="get">
     <input type="date" name="startDate" value="{{startDate}}"/>〜<input type="date" name="endDate" value="{{endDate}}"/>
@@ -13,13 +14,6 @@
 <tr bgcolor="#f0f8ff" align="center">
     <th>投稿内容</th>
     <th>投稿日時</th>
-    <th>エンゲ率</th>
-    <th>インプ</th>
-    <th>リーチ</th>
-    <th>いいね</th>
-    <th>コメント</th>
-    <th>保存数</th>
-    <th>動画再生</th>
 </tr>
 
 <!- 取得したSQLクエリ分、行作成する ->
@@ -28,13 +22,6 @@
     <th>{{post.post_text}}</th>
     <!-秒以下を切り捨て->
     <th>{{post.post_date.strftime("%Y/%m/%d %H:%M")}}</th>
-    <th>{{post.eng_rate}}%</th>
-    <th>{{post.imp}}</th>
-    <th>{{post.reach}}</th>
-    <th>{{post.good}}</th>
-    <th>{{post.comment}}</th>
-    <th>{{post.save_cnt}}</th>
-    <th>{{post.play_cnt}}</th>
 </tr>
 {% endfor %}
 </table>

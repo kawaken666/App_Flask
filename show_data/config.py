@@ -6,6 +6,7 @@ class BaseConfig(object):
     DEBUG = False
     TESTING = False
 
+
     # herokuでしかos.environ['DATABASE_URL']は処理できないのでローカルだと以下1行をコメントアウトする必要あり
     DATABASE_URI = os.environ['DATABASE_URL']
     @classmethod
