@@ -1,4 +1,4 @@
 /.coverage
 /.pytest_cache
 /.idea
-/.show_data/config.py
+config.py
