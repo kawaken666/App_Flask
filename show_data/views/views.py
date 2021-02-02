@@ -113,13 +113,13 @@ def do_regist():
         # フォーム未入力チェック(フロントのバリデーションを突破された時用)
         if request.form['email'] == '' or request.form['password'] == '':
             flash('メールアドレスとパスワードは必須項目です。')
-            return render_template('login.html')
+            return render_template('regist.html')
 
         already_user = User.query.filter_by(email=request.form['email']).first()
         # DBに既に登録されているメールアドレスが入力された場合
         if already_user is not None:
             flash('そのメールアドレスは既に使用されています')
-            return redirect(url_for('regist'))
+            return render_template('regist.html')
         # 新規登録できるメールアドレスの場合
         else:
             # リクエストフォームのemailをUserインスタンスにセット

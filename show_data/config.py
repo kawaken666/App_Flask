@@ -5,10 +5,10 @@ import psycopg2
 class BaseConfig(object):
     DEBUG = False
     TESTING = False
-    """
+
     # herokuでしかos.environ['DATABASE_URL']は処理できないのでローカルだと以下1行をコメントアウトする必要あり
     DATABASE_URI = os.environ['DATABASE_URL']
-    """
+
     def con(self):
         return psycopg2.connect(BaseConfig.DATABASE_URI, sslmode='require')
 
@@ -35,20 +35,20 @@ class TestingConfig(BaseConfig):
         'name': 'show_data'
     })
 
-"""
+
 # heroku用のpsycopg2設定(ローカルだと以下1行は動かないのでコメントアウトする必要あり)
 conn = BaseConfig.con()
-"""
+
 
 # SQLAlchemyのDBのURI設定(環境によってconfigクラスを切り替える)
-SQLALCHEMY_DATABASE_URI = DevelopmentConfig.DATABASE_URI
+SQLALCHEMY_DATABASE_URI = BaseConfig.DATABASE_URI
 
 SQLALCHEMY_TRACK_MODIFICATIONS = True
 
 # デバッグモード設定(環境によってconfigクラスを切り替える)
-DEBUG = DevelopmentConfig.DEBUG
+DEBUG = BaseConfig.DEBUG
 
 # テストモード設定(環境によってconfigクラスを切り替える)
-TESTING = DevelopmentConfig.TESTING
+TESTING = BaseConfig.TESTING
 
 SECRET_KEY = 'secret'
