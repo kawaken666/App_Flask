@@ -3,7 +3,7 @@ from flask import request, redirect, url_for, render_template, flash, session
 from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin, current_user
 from show_data.models.users import User
 from show_data.models.posts import Post
-from show_data.views.helper_db import insert_into_db
+from show_data.views.helper_db import insert_into_db, delete_db
 from datetime import datetime
 from sqlalchemy import and_, desc
 
@@ -64,7 +64,7 @@ def logout():
         return render_template('login.html')
 
 
-# 一覧表示画面表示
+# 一覧表示画面遷移
 @app.route('/show', methods=['GET'])
 def show():
     # ログインしていない場合、単にログイン画面にレンダリングする
@@ -102,7 +102,7 @@ def show():
         return render_template('show.html', posts=posts, startDate=query_startDate, endDate=query_endDate)
 
 
-# 会員登録画面表示
+# 会員登録画面遷移
 @app.route('/regist', methods=['GET'])
 def regist():
     return render_template('regist.html')
@@ -138,7 +138,7 @@ def do_regist():
             return render_template('login.html')
 
 
-# 新規投稿画面
+# 新規投稿画面遷移
 @app.route('/regist_post', methods=['GET'])
 def regist_post():
     # ログインしていない場合、単にログイン画面にレンダリングする
@@ -161,6 +161,28 @@ def do_regist_post():
     flash('投稿が完了しました')
     return redirect(url_for('show'))
 
+# 投稿編集画面遷移
+@app.route('/edit_post/<int:post_id>', methods=['GET'])
+def edit_post(post_id):
+    post = Post.query.filter(Post.post_id == post_id).first()
+    return render_template("edit_post.html", post=post)
+
+# 投稿編集処理
+@app.route('/do_edit_post/<int:post_id>', methods=['GET', 'POST'])
+def do_edit_post(post_id):
+    post = Post.query.filter(Post.post_id == post_id).first()
+    post.post_text = request.form['post_text']
+    db.session.commit()
+    flash('投稿が更新されました')
+    return redirect(url_for('show'))
+
+# 投稿削除処理
+@app.route('/do_delete_post/<int:post_id>', methods=['GET', 'POST'])
+def do_delete_post(post_id):
+    post = Post.query.filter(Post.post_id == post_id).first()
+    delete_db(post)
+    flash('投稿を削除しました')
+    return redirect(url_for('show'))
 
 # 存在しないURLへアクセスされた時の処理
 # ルートアクセス処理にリダイレクト

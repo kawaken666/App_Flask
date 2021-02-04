@@ -1,0 +1,18 @@
+<link rel="stylesheet" href="{{url_for('static',filename='stylesheet.css')}}">
+
+{% extends "layout.html" %}
+{% block body%}
+<h5>投稿編集</h5>
+<form action="{{url_for('do_edit_post', post_id=post.post_id)}}" method="post">
+    <div class="form-group">
+        <label for="InputTitle">投稿内容を編集してください</label>
+        <textarea name="post_text" cols="128" rows="3" required>{{post.post_text}}</textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">更新</button>
+</form>
+<form action="{{url_for('do_delete_post', post_id=post.post_id)}}" method="get">
+    <button type="submit" class="btn btn-primary">削除</button>
+</form>
+<br>
+<a class="" href={{url_for('show')}}>戻る</a>
+{% endblock %}

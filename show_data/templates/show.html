@@ -10,18 +10,19 @@
     <button type="submit" class="btn btn-primary">日付指定</button>
 </form>
 
-<table border="1">
+<table>
 <tr bgcolor="#f0f8ff" align="center">
-    <th>投稿内容</th>
-    <th>投稿日時</th>
+    <th class="need_border">投稿内容</th>
+    <th class="need_border">投稿日時</th>
 </tr>
 
 <!- 取得したSQLクエリ分、行作成する ->
 {% for post in posts %}
 <tr align="center">
-    <th>{{post.post_text}}</th>
+    <td class="need_border">{{post.post_text}}</td>
     <!-秒以下を切り捨て->
-    <th>{{post.post_date.strftime("%Y/%m/%d %H:%M")}}</th>
+    <td class="need_border">{{post.post_date.strftime("%Y/%m/%d %H:%M")}}</td>
+    <td class="not_need_border"><a href={{url_for('edit_post', post_id=post.post_id)}}>編集</a></td>
 </tr>
 {% endfor %}
 </table>
