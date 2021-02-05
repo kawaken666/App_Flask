@@ -3,11 +3,12 @@
 {% extends "layout.html" %}
 {% block body%}
 <h5>新規投稿</h5>
-<form action="{{url_for('do_regist_post')}}" method="post">
+<form action="{{url_for('do_regist_post')}}" method="post" enctype="multipart/form-data">
     <div class="form-group">
         <label for="InputTitle">投稿内容</label>
         <textarea name="post_text" cols="128" rows="3" required placeholder="128文字で入力してください"></textarea>
     </div>
+    <input type="file" name="img_file">
     <button type="submit" class="btn btn-primary">投稿</button>
 </form>
 <br>

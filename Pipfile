@@ -13,6 +13,7 @@ gunicorn = "*"
 psycopg2 = "*"
 pytest = "*"
 pytest-cov = "*"
+werkzeug = "*"
 
 [dev-packages]
 

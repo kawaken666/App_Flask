@@ -12,6 +12,7 @@
 
 <table>
 <tr bgcolor="#f0f8ff" align="center">
+    <th class="need_border">画像</th>
     <th class="need_border">投稿内容</th>
     <th class="need_border">投稿日時</th>
 </tr>
@@ -19,6 +20,11 @@
 <!- 取得したSQLクエリ分、行作成する ->
 {% for post in posts %}
 <tr align="center">
+    {% if post.img_url != None %}
+    <td class="need_border"><img src="../static/{{post.img_url}}" width="100%"></td>
+    {% else %}
+    <td class="need_border">-</td>
+    {% endif %}
     <td class="need_border">{{post.post_text}}</td>
     <!-秒以下を切り捨て->
     <td class="need_border">{{post.post_date.strftime("%Y/%m/%d %H:%M")}}</td>
