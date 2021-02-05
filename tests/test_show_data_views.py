@@ -1,3 +1,5 @@
+from werkzeug.datastructures import FileStorage
+
 from tests.helpers import (assert_http_200, assert_http_302, assert_render_do_regist,
                            assert_flash_required_email_and_password, assert_flash_regist_complete,
                            assert_flash_duplicate_email, assert_render_login, assert_redirect_show,
@@ -176,6 +178,8 @@ def test_views_do_regist_post(client):
     res = client.post('/login', data=dict(email='kenta', password='kenta'))
 
     # 投稿登録処理正常
-    res = client.post('/do_regist_post', data=dict(post_text='新規投稿テスト'))
+    res = client.post('/do_regist_post', data=dict(post_text='新規投稿テスト',
+                                                   img_file=FileStorage(filename='')),
+                      content_type="multipart/form-data")
     assert_http_302(res)
     assert_redirect_show(res)

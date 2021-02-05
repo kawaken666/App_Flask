@@ -1,7 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-from werkzeug.security import generate_password_hash
 
 app = Flask(__name__)
 app.config.from_object('show_data.config')
@@ -10,6 +9,9 @@ app.config.from_object('show_data.config')
 login_manager = LoginManager()
 login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'secret'
+UPLOAD_FOLDER = './show_data/static/uploads'
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'gif', 'jpeg'])
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # SQLAlchemyインスタンスを作成して初期化
 db = SQLAlchemy(app)

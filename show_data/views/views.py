@@ -4,8 +4,11 @@ from flask_login import LoginManager, login_user, logout_user, login_required, U
 from show_data.models.users import User
 from show_data.models.posts import Post
 from show_data.views.helper_db import insert_into_db, delete_db
-from datetime import datetime
+from show_data.views.helper import is_allowed_file
+from datetime import datetime, timedelta, timezone
 from sqlalchemy import and_, desc
+from werkzeug.utils import secure_filename
+import os
 
 # ルートアクセス処理
 @app.route('/', methods=['GET'])
@@ -155,8 +158,21 @@ def do_regist_post():
     if not current_user.is_authenticated:
         return render_template('login.html')
 
+    # 画像ファイルをリクエストから取得
+    img_file = request.files['img_file']
+
+    # 画像ファイルのURLを格納する変数を定義
+    img_url = None
+
+    # アップロードファイルを保存する
+    if img_file is not None and is_allowed_file(img_file.filename):
+        filename = secure_filename(img_file.filename)
+        img_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        img_url = 'uploads/' + filename
+
     # postインスタンスにフォームの投稿内容を格納して、postsテーブルにINSERTする
-    post = Post(post_text=request.form['post_text'], post_date=datetime.now())
+    post = Post(post_text=request.form['post_text'], img_url=img_url,
+                post_date=datetime.now(timezone(timedelta(hours=+9), 'JST')))
     insert_into_db(post)
     flash('投稿が完了しました')
     return redirect(url_for('show'))
