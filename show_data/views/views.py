@@ -167,7 +167,7 @@ def do_regist_post():
     # アップロードファイルを保存する
     if img_file is not None and is_allowed_file(img_file.filename):
         filename = secure_filename(img_file.filename)
-        img_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        img_file.save(app.config['UPLOAD_FOLDER'])
         img_url = 'uploads/' + filename
 
     # postインスタンスにフォームの投稿内容を格納して、postsテーブルにINSERTする
