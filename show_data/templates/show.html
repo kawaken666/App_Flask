@@ -21,7 +21,7 @@
 {% for post in posts %}
 <tr align="center">
     {% if post.img_url != None %}
-    <td class="need_border"><img src="https://mighty-shore-18727.herokuapp.com/show_data/static/{{post.img_url}}" width="100%"></td>
+    <td class="need_border"><img src="data:image/png;base64,{{post.img_encoded_base64}}" width="100%"></td>
     {% else %}
     <td class="need_border">-</td>
     {% endif %}
