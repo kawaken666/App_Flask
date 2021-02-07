@@ -7,8 +7,7 @@ from show_data.views.helper_db import insert_into_db, delete_db
 from show_data.views.helper import is_allowed_file
 from datetime import datetime, timedelta, timezone
 from sqlalchemy import and_, desc
-from werkzeug.utils import secure_filename
-import os
+import base64, io
 
 # ルートアクセス処理
 @app.route('/', methods=['GET'])
@@ -160,18 +159,21 @@ def do_regist_post():
 
     # 画像ファイルをリクエストから取得
     img_file = request.files['img_file']
+    # 画像ファイルのファイル名を格納
+    img_file_filename = img_file.filename
+    # 画像ファイルのストリームを格納
+    img_file_stream = img_file.read()
 
-    # 画像ファイルのURLを格納する変数を定義
-    img_url = None
+    # 画像ファイルのストリームをバイナリ>base64>utf-8の順に変換した値を格納するための変数を定義している
+    img_base64 = None
 
-    # アップロードファイルを保存する
-    if img_file is not None and is_allowed_file(img_file.filename):
-        filename = secure_filename(img_file.filename)
-        img_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        img_url = 'uploads/' + filename
+    # 画像ファイルのBytesをbase64に変換する
+    if img_file is not None and is_allowed_file(img_file_filename):
+        # base64に変換
+        img_base64 = base64.b64encode(img_file_stream).decode("utf-8")
 
     # postインスタンスにフォームの投稿内容を格納して、postsテーブルにINSERTする
-    post = Post(post_text=request.form['post_text'], img_url=img_url,
+    post = Post(post_text=request.form['post_text'], img_encoded_base64=img_base64,
                 post_date=datetime.now(timezone(timedelta(hours=+9), 'JST')))
     insert_into_db(post)
     flash('投稿が完了しました')

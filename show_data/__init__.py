@@ -9,7 +9,7 @@ app.config.from_object('show_data.config')
 login_manager = LoginManager()
 login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'secret'
-UPLOAD_FOLDER = 'https://mighty-shore-18727.herokuapp.com/show_data/static/uploads'
+UPLOAD_FOLDER = './show_data/static/uploads'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'gif', 'jpeg'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
