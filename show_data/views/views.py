@@ -163,6 +163,10 @@ def do_regist_post():
     img_file_filename = img_file.filename
     # 画像ファイルのストリームを格納
     img_file_stream = img_file.read()
+    print(request.form['post_text'])
+    print(img_file)
+    print(request)
+    print(request.files)
 
     # 画像ファイルのストリームをバイナリ>base64>utf-8の順に変換した値を格納するための変数を定義している
     img_base64 = None
@@ -182,12 +186,20 @@ def do_regist_post():
 # 投稿編集画面遷移
 @app.route('/edit_post/<int:post_id>', methods=['GET'])
 def edit_post(post_id):
+    # ログインしていない場合、単にログイン画面にレンダリングする
+    if not current_user.is_authenticated:
+        return render_template('login.html')
+
     post = Post.query.filter(Post.post_id == post_id).first()
     return render_template("edit_post.html", post=post)
 
 # 投稿編集処理
 @app.route('/do_edit_post/<int:post_id>', methods=['GET', 'POST'])
 def do_edit_post(post_id):
+    # ログインしていない場合、単にログイン画面にレンダリングする
+    if not current_user.is_authenticated:
+        return render_template('login.html')
+
     post = Post.query.filter(Post.post_id == post_id).first()
     post.post_text = request.form['post_text']
     db.session.commit()
@@ -197,6 +209,10 @@ def do_edit_post(post_id):
 # 投稿削除処理
 @app.route('/do_delete_post/<int:post_id>', methods=['GET', 'POST'])
 def do_delete_post(post_id):
+    # ログインしていない場合、単にログイン画面にレンダリングする
+    if not current_user.is_authenticated:
+        return render_template('login.html')
+
     post = Post.query.filter(Post.post_id == post_id).first()
     delete_db(post)
     flash('投稿を削除しました')

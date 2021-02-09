@@ -1,3 +1,5 @@
+from io import BytesIO
+
 from werkzeug.datastructures import FileStorage
 
 from tests.helpers import (assert_http_200, assert_http_302, assert_render_do_regist,
@@ -177,9 +179,16 @@ def test_views_do_regist_post(client):
     # ログイン処理
     res = client.post('/login', data=dict(email='kenta', password='kenta'))
 
-    # 投稿登録処理正常
+    # 投稿登録処理正常(ファイルアップロードなし)
+    res = client.post('/do_regist_post', data=dict(post_text='新規投稿テスト', img_file=FileStorage(filename='')),
+                      content_type="multipart/form-data")
+    assert_http_302(res)
+    assert_redirect_show(res)
+
+
+    # 投稿登録処理正常(ファイルアップロードあり)
     res = client.post('/do_regist_post', data=dict(post_text='新規投稿テスト',
-                                                   img_file=FileStorage(filename='')),
+                                                   img_file=FileStorage(filename='img.png', stream=BytesIO(b'test'))),
                       content_type="multipart/form-data")
     assert_http_302(res)
     assert_redirect_show(res)
