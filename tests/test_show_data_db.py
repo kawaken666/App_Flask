@@ -10,7 +10,8 @@ from show_data.views.helper_db import insert_into_db
 user = User(email='kenta')
 user.set_password('kenta')
 
-post = Post(post_text='test', post_date=datetime.now())
+post = Post(post_text='test', img_encoded_base64='/9j/4AAQSkZJRgABAQEASABIAAD/7SF4UGhvdG9zaG9wIDMuMAA4QklNBAQAAAAAA',
+            post_date=datetime.now())
 
 
 # 最初のテスト関数の引数にsetup_dbフィクスチャを入れることで、pytest実行時にdbのcreateを行う。pytest実行後にdropする。

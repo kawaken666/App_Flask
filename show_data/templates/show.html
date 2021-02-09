@@ -20,7 +20,7 @@
 <!- 取得したSQLクエリ分、行作成する ->
 {% for post in posts %}
 <tr align="center">
-    {% if post.img_url != None %}
+    {% if post.img_encoded_base64 != None %}
     <td class="need_border"><img src="data:image/png;base64,{{post.img_encoded_base64}}" width="100%"></td>
     {% else %}
     <td class="need_border">-</td>
